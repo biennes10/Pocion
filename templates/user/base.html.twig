@@ -1,0 +1,386 @@
+{% set trans_day_hash = {
+    "Mon": "Lun",
+    "Tue": "Mar",
+    "Wed": "Mer",
+    "Thu": "Jeu",
+    "Fri": "Ven",
+    "Sat": "Sam",
+    "Sun": "Dim",
+    "Monday": "Lundi",
+    "Tuesday": "Mardi",
+    "Wednesday": "Mercredi",
+    "Thursday": "Jeudi",
+    "Friday": "Vendredi",
+    "Saturday": "Samedi",
+    "Sunday": "Dimanche"
+}
+%}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}{% endblock %}</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{{ asset('assets/css/utilities/fontawesome.css') }}">
+    <link rel="icon" type="image/png" href="{{ asset('assets/img/logo/pocion-min.png') }}" />
+    <script src="{{ asset('assets/js/jquery-3.3.1.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('bundles/fosjsrouting/js/router.min.js') }}"></script>
+    <script src="{{ path('fos_js_routing_js', { callback: 'fos.Router.setData' }) }}"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    {% block stylesheets %}{% endblock %}
+    {% block js_start %}{% endblock %}
+
+</head>
+<body>
+    <main class="row w-100 h-100">
+        <aside class="sidebar shadow">
+            <div class="top row-between-center">
+                <a href="{{ path('home') }}"><img class="h-100" src="{{ asset('assets/img/logo/pocion.svg') }}" alt="pocion-logo"></a>
+                <div id="burger"><i class="fas fa-bars" onclick="displayMenu(1)"></i></div>
+            </div>
+            <nav>
+                <ul>
+                    <li class="rounded{%  if page == 'home' %} active shadow{% endif %}"><a class="rounded" href="{{ path('home') }}"><i class="fas fa-home"></i>Accueil</a></li>
+                    <li class="rounded{%  if page == 'handrail' %} active shadow{% endif %}"><a class="rounded" href="{{ path('handrail') }}"><i class="fas fa-chart-bar"></i>Main courante</a></li>
+                    <li class="rounded{%  if page == 'agenda' %} active shadow{% endif %}"><a class="rounded" href="{{ path('agenda') }}"><i class="fas fa-calendar"></i>Agenda</a></li>
+                    <li class="rounded{%  if page == 'file' %} active shadow{% endif %}"><a class="rounded" href="{{ path('file') }}"><i class="fas fa-archive"></i>Base documentaire</a></li>
+                    {% if is_granted("ROLE_ADMIN") %}
+                        <li class="rounded{%  if page == 'projet' %} active shadow{% endif %}"><a class="rounded" href="{{ path('projet') }}"><i class="fas fa-project-diagram"></i>Projets</a></li>
+                        <li class="rounded{%  if page == 'user' %} active shadow{% endif %}"><a class="rounded" href="{{ path('user') }}"><i class="fas fa-users"></i>Utilisateurs</a></li>
+                        <li class="rounded{%  if page == 'systems' %} active shadow{% endif %}"><a class="rounded" href="{{ path('file') }}"><i class="fas fa-cogs"></i>Systèmes</a></li>
+
+                    {% endif %}
+                </ul>
+            </nav>
+        </aside>
+        <article id="side-content" class="right-medium">
+            <section id="top-bar" class="w-100 row-between-center">
+                <div id="top-bar-left"><h2>{{ block('title') }}</h2></div>
+                <div id="top-bar-right" class="row-start-center">
+                    <form class="row-start-center" action="" method="post">
+                        <div class="column-center"><input id="search-bar" type="text" name="search" placeholder="Rechercher" autocomplete="off"></div>
+                        <div id="search-result" class="shadow">
+                            <div id="search-handrail">
+                                <div class="search-cat">Main courante</div>
+                                <ul id="search-result-handrail">
+                                </ul>
+                            </div>
+                            <div id="search-agenda">
+                                <div class="search-cat">Agenda</div>
+                                <ul id="search-result-agenda">
+                                </ul>
+                            </div>
+                            <div id="search-files">
+                                <div class="search-cat">Base documentaire</div>
+                                <ul id="search-result-files">
+                                </ul>
+                            </div>
+
+                        </div>
+                        <button class="row-center-center shadow" type="submit"><i class="fas fa-search row-center-center"></i></button>
+                    </form>
+                    <div class="icon-wrapper">
+                    <a class="user-icon" href=""><i class="fas fa-user"></i></a>
+                    <ul id="user-menu" style="display: none" class="shadow">
+                        <li><a href="{{ path('profile') }}">Mon profile</a></li>
+                        <li><a href="">Paramètres</a></li>
+                        <li><a href="{{ path('security_logout') }}">Déconnexion</a></li>
+                    </ul>
+                    </div>
+                    {% set nbNotifs = app.user.getNotifUsers.count - app.user.getNbUnopenedNotif.count %}
+
+
+                    <div class="icon-wrapper">
+                        <a class="notification-icon" href=""><i class="fas fa-bell"></i></a>
+                        <div class="notification-circle" >
+                            <div class="notification-number" {% if nbNotifs == 0 %} style="display: none;"{% endif %} id="notification-number-display">{{ nbNotifs }}</div>
+                        </div>
+                        <div id="notif-menu" style="display: none;" class="notification-callout">
+                            <div class="callout-top-right">
+                                {% if app.user.getNotifUsers is  empty %}
+                                        <div class="notification-empty-message">
+                                            Vous n'avez aucune notification
+                                        </div>
+                                {% else %}
+                                    {%
+                                        set notif_array = {
+                                        'trash':{
+                                        'success':'toast--green',
+                                        'warning':'toast--warning'
+                                        },
+                                        'change_profile':{
+                                            'neutral':'toast--blue',
+                                            'success':'toast--green',
+                                            'warning':'toast--warning'
+                                        },
+                                        'delete_project':{
+                                            'neutral':'toast--yellow'
+                                        },
+                                        'add_to_project':{
+                                            'neutral':'toast--blue'
+                                        },
+                                        'delete_from_project':{
+                                            'warning':'toast--warning'
+                                        },
+                                        'added_to_project':{
+                                            'neutral':'toast--blue'
+                                        }
+
+
+                                    }
+                                    %}
+
+                                    <div class="toast__container">
+                                        <div class="toast__cell">
+                                            <div class="toast__overflow-container">
+                                            {% for notif_user in app.user.getNotifUsers  %}
+                                                {% set type_array = notif_user.notification.type|split(',') %}
+                                                {% set type = notif_array[type_array[0]][type_array[1]] %}
+                                                {% if type_array[0] != "added_to_project" and type_array[0] != "delete_from_project" and type_array[0] != "trash" %}
+                                                    {% set putPath = "yes" %}
+                                                    {% set path_array = notif_user.notification.path|split(',') %}
+                                                    {% set path_type = path_array[0] %}
+                                                    {% set path_value = path_array[1] %}
+                                                    {% set path_variable_array = path_type|split('_') %}
+                                                    {% set path_variable = path_variable_array[0] %}
+                                                    {% if path_variable == "handrail" %}
+                                                        {% set thePath = path(path_type, {handrail: path_value}) %}
+                                                    {% elseif path_variable == "file" %}
+                                                        {% set thePath = path(path_type, {file: path_value}) %}
+                                                    {% elseif path_variable == "agenda" %}
+                                                        {% set thePath = path(path_type, {agenda: path_value}) %}
+                                                    {% endif %}
+
+
+                                                    <a href="{{ thePath }}">
+                                                    {% else %}
+                                                    {% set putPath = "no" %}
+                                                {% endif %}
+
+                                                    <div class="toast {{ type }} {% if not loop.first %} add-margin{% endif %} {% if notif_user.opened == 0 %}unopened{% endif %} {% if putPath == "yes" %}hover{% endif %}"  data-id="{{ notif_user.id }}">
+                                                        <div class="toast__icon">
+                                                            <i class="fas fa-{{ notif_user.notification.icon }}"></i>
+                                                        </div>
+                                                        <div class="toast__content">
+                                                            <p class="toast__type">{{notif_user.notification.title}}</p>
+                                                            <p class="toast__message">{{ notif_user.notification.content }}</p>
+                                                        </div>
+                                                        {% if type_array[0] == "delete_from_project" %}
+                                                            <div class="toast__buttons">
+                                                                <a  class="confirm">Confirmer</a>
+                                                                <a  class="decline">Décliner</a>
+                                                            </div>
+                                                        <!--<div class="toast__close">
+                                                            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15.642 15.642" xmlns:xlink="http://www.w3.org/1999/xlink" enable-background="new 0 0 15.642 15.642">
+                                                                <path fill-rule="evenodd" d="M8.882,7.821l6.541-6.541c0.293-0.293,0.293-0.768,0-1.061  c-0.293-0.293-0.768-0.293-1.061,0L7.821,6.76L1.28,0.22c-0.293-0.293-0.768-0.293-1.061,0c-0.293,0.293-0.293,0.768,0,1.061  l6.541,6.541L0.22,14.362c-0.293,0.293-0.293,0.768,0,1.061c0.147,0.146,0.338,0.22,0.53,0.22s0.384-0.073,0.53-0.22l6.541-6.541  l6.541,6.541c0.147,0.146,0.338,0.22,0.53,0.22c0.192,0,0.384-0.073,0.53-0.22c0.293-0.293,0.293-0.768,0-1.061L8.882,7.821z"></path>
+                                                            </svg>
+                                                        </div> -->
+                                                        {% endif %}
+                                                        <div class="toast__date">
+                                                            {{ notif_user.createdAt|date("d/m, H:i")  }}
+                                                        </div>
+                                                    </div>
+                                                {% if putPath == "yes" %}
+                                                    </a>
+                                                {% endif %}
+                                            {% endfor %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="content col-between">
+                {% block body %}{% endblock %}
+            </section>
+        </article>
+    </main>
+    <script>
+        var opened = false;
+        var ajaxNotifs = true;
+        $(function() {
+            $('tbody tr').click(function() {
+                window.location.href = $(this).data("link");
+            });
+
+
+            $(document).on("click", ".search-item", function () {
+                window.location.href = $(this).data("id");
+            });
+
+            searchResult();
+            var sb = $("#search-bar");
+            sb.on("click", function () {
+                $("#search-result").show();
+                searchResult();
+            });
+            $(document).mouseup(function(e)
+            {
+                var container = $("#search-bar");
+
+                // if the target of the click isn't the container nor a descendant of the container
+                if (!container.is(e.target) && container.has(e.target).length === 0 && !$("#search-result").is(e.target) && $("#search-result").has(e.target).length === 0)
+                {
+                    $("#search-result").hide();
+                    searchResult();
+                }
+            });
+            sb.keyup(function() {
+                searchResult();
+                var val = this.value;
+                val = val.replace(/^\s|\s $/, "");
+                if (val !== "") {
+                    searchInDB(val);
+                } else {
+                    $("#search-result-handrail").html("");
+                    $("#search-result-agenda").html("");
+                    $("#search-result-files").html("");
+                }
+            });
+
+
+        });
+
+        $( window ).resize(function() {
+            searchResult();
+        });
+
+        async function submitNotif(accept,id,toast){
+            toast.fadeOut("slow");
+            if(accept){
+                await axios.get(Routing.generate("delete_confirm",{delete:id})).catch(error=>{
+                    console.log(error.message);
+                });
+            }else {
+                await axios.get(Routing.generate("delete_decline",{delete:id})).catch(error=>{
+                    console.log(error.message);
+                });
+            }
+
+        }
+
+        async function updateNotifs(){
+            await axios.get(Routing.generate("update_notifs"));
+        }
+
+        async function searchInDB(value) {
+            const response = await axios.get(Routing.generate("search", {search: value}));
+            let result = response.data;
+            $("#search-result-handrail").html("");
+            $.each(result.handrail, function (index, value) {
+                $("#search-result-handrail").append("<li class='search-item' data-id='"+Routing.generate("handrail_article", {handrail: value.id})+"'>"+value.subject+"</li>")
+            })
+            $("#search-result-agenda").html("");
+            $.each(result.agenda, function (index, value) {
+                $("#search-result-agenda").append("<li class='search-item' data-id='"+Routing.generate("agenda_article", {agenda: value.id})+"'>"+value.subject+"</li>")
+            })
+            $("#search-result-files").html("");
+            $.each(result.files, function (index, value) {
+                $("#search-result-files").append("<li class='search-item' data-id='"+Routing.generate("file_article", {file: value.id})+"'>"+value.subject+"</li>")
+            })
+        }
+
+        function displayMenu(a) {
+            if (a === 1) {
+                $("#top-bar-left h2").prepend('<i class="fas fa-bars" onclick="displayMenu(2)"></i>');
+                $(".sidebar").hide(100);
+                $("#side-content").removeClass('right-medium').addClass('right-large');
+            } else if (a === 2) {
+                $("#top-bar-left h2 i").remove();
+                $("#side-content").addClass('right-medium').removeClass('right-large');
+                $(".sidebar").show();
+            }
+        }
+        function swapToasts(){
+            opened = false;
+            $('.toast').each(function(){
+                    $(this).css({'background-color':'#fff'});
+                    $(this).attr('opened','1');
+
+                        $(this).mouseenter(function () {
+                            $(this).css("background", "grey");
+                        }).mouseleave(function () {
+                            $(this).css("background", "white");
+                        });
+
+
+            });
+
+
+
+
+        }
+        function searchResult() {
+            var sb = $("#search-bar");
+            var sr = $("#search-result");
+            var baseOffset = sb.offset();
+            sr.offset({
+                top: baseOffset.top + (sb.height() * 2),
+                left: baseOffset.left,
+            });
+            sr.width(sb.width());
+
+        }
+
+        $(function() {
+            $('#user-menu').css({top: ($(".user-icon").offset().top + $(".user-icon").height()) + "px", right: ($(window).width()-$(".user-icon").offset().left -$(".user-icon").width()-25)+"px"});
+        });
+
+        $('html').click(function() {
+            $("#user-menu").slideUp("fast");
+            $("#notif-menu").slideUp("fast");
+            if(opened){
+                swapToasts();
+            }
+        });
+
+        $("#user-menu").click(function () {
+            event.stopPropagation();
+        });
+
+        $(".user-icon").on("click", function (event) {
+            event.stopPropagation();
+            event.preventDefault();
+            $('#user-menu').slideToggle("fast");
+
+        })
+        $(".notification-icon").on("click", function (event) {
+            if(opened){
+                swapToasts();
+
+            }else if(ajaxNotifs){
+
+                updateNotifs();
+                ajaxNotifs = false;
+            }
+            event.stopPropagation();
+            event.preventDefault();
+            opened = true;
+            $('#notif-menu').slideToggle("fast");
+            $('#notification-number-display').slideUp("fast");
+
+        })
+        $(".decline").on("click",function (event){
+            event.stopPropagation();
+            event.preventDefault();
+            var toast = $(this).closest(".toast");
+            submitNotif(false,toast.attr('data-id'),toast);
+            toast.fadeOut("slow");
+        })
+
+        $(".confirm").on("click",function (event){
+            event.stopPropagation();
+            event.preventDefault();
+            var toast = $(this).closest(".toast");
+            if(confirm("Etes vous sur de vouloir supprimer définitivement cet article ?")) {
+                submitNotif(true, toast.attr("data-id"), toast);
+            }
+
+        })
+    </script>
+    {% block js_end %}{% endblock %}
+</body>
+</html>

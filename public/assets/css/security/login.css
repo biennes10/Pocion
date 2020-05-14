@@ -1,0 +1,204 @@
+/* COULEUR MENU */
+/* NAV */
+/* WRAPPER */
+/* COULEUR FOND DE PAGE */
+/* FONTS (Chemins relatifs en partant de public/assets/fonts/) */
+@import url("//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css");
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "Circular Regular";
+  -webkit-appearance: none;
+}
+
+input {
+  border-radius: 0;
+}
+
+a, i {
+  color: inherit;
+  text-decoration: none;
+  width: inherit;
+  height: inherit;
+  display: inherit;
+}
+
+li {
+  list-style-type: none;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+}
+
+.preload * {
+  -webkit-transition: none !important;
+  -moz-transition: none !important;
+  -ms-transition: none !important;
+  -o-transition: none !important;
+}
+
+@font-face {
+  font-family: "Circular Regular";
+  src: url("../../fonts/circular/lineto-circular-pro-medium.eot?") format("eot"), url("../../fonts/circular/lineto-circular-pro-medium.woff2") format("woff2"), url("../../fonts/circular/lineto-circular-pro-medium.woff") format("woff"), url("../../fonts/circular/lineto-circular-pro-medium.ttf") format("truetype"), url("../../fonts/circular/lineto-circular-pro-medium.svg#Circular_Regular") format("svg");
+}
+@font-face {
+  font-family: "Circular Italic";
+  src: url("../../fonts/circular/lineto-circular-pro-mediumItalic.eot?") format("eot"), url("../../fonts/circular/lineto-circular-pro-mediumItalic.woff2") format("woff2"), url("../../fonts/circular/lineto-circular-pro-mediumItalic.woff") format("woff"), url("../../fonts/circular/lineto-circular-pro-mediumItalic.ttf") format("truetype"), url("../../fonts/circular/lineto-circular-pro-mediumItalic.svg#Circular_Italic") format("svg");
+}
+@font-face {
+  font-family: "Circular Bold";
+  src: url("../../fonts/circular/lineto-circular-pro-bold.eot?") format("eot"), url("../../fonts/circular/lineto-circular-pro-bold.woff2") format("woff2"), url("../../fonts/circular/lineto-circular-pro-bold.woff") format("woff"), url("../../fonts/circular/lineto-circular-pro-bold.ttf") format("truetype"), url("../../fonts/circular/lineto-circular-pro-bold.svg#Circular_Bold") format("svg");
+}
+@font-face {
+  font-family: "Circular Bold Italic";
+  src: url("../../fonts/circular/lineto-circular-pro-boldItalic.eot?") format("eot"), url("../../fonts/circular/lineto-circular-pro-boldItalic.woff2") format("woff2"), url("../../fonts/circular/lineto-circular-pro-boldItalic.woff") format("woff"), url("../../fonts/circular/lineto-circular-pro-boldItalic.ttf") format("truetype"), url("../../fonts/circular/lineto-circular-pro-boldItalic.svg#Circular_Bold_Italic") format("svg");
+}
+.document-wrapper {
+  height: 100%;
+  width: 100%;
+}
+
+.document-wrapper {
+  display: flex;
+  flex-direction: row;
+  position: relative;
+}
+
+.sidebar {
+  position: relative;
+  z-index: 2;
+  width: 40vh;
+  height: 100%;
+  padding: 3vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.sidebar .top form {
+  margin-top: 2vh;
+  width: 100%;
+}
+.sidebar .top form input, .sidebar .top form button {
+  width: 100%;
+  padding: 1.7vh 1.8vh 1.8vh 1.8vh;
+  border: none;
+  font-size: 1.8vh;
+  outline: none;
+}
+.sidebar .top form input {
+  background-color: #f1f1f1;
+  border: 1px solid #f1f1f1;
+  margin-bottom: 1vh;
+  transition: background-color 0.2s ease;
+}
+.sidebar .top form input:focus {
+  background-color: #fcfcfc;
+}
+.sidebar .top form button {
+  background-color: #24B8CC;
+  color: white;
+  border-bottom: 4px solid #1fa1b2;
+}
+.sidebar .bottom {
+  font-size: 1.6vh;
+}
+.sidebar .bottom .links {
+  margin-bottom: 2vh;
+}
+.sidebar .bottom .links a {
+  color: #979797;
+  transition: all 0.2s ease-in-out;
+}
+.sidebar .bottom .links a:hover {
+  text-decoration: underline;
+}
+.sidebar .bottom .links .admin-link {
+  color: #24B8CC;
+}
+.sidebar .bottom .logos {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+.sidebar .bottom .logos img {
+  height: 10vh;
+}
+
+.right {
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  height: 100%;
+  width: calc(100% - 40vh);
+  background-image: radial-gradient(#ffffff, #24B8CC);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.right img {
+  position: relative;
+  height: 60%;
+}
+@keyframes bumpimg {
+  0% {
+    height: 60%;
+  }
+  50% {
+    height: 64%;
+  }
+  100% {
+    height: 60%;
+  }
+}
+.right:hover img {
+  animation: bumpimg 3s infinite;
+}
+
+@media only screen and (max-width: 480px) {
+  .sidebar {
+    width: 100%;
+  }
+  .sidebar .top form {
+    margin-top: 10vh;
+  }
+  .sidebar .top form input, .sidebar .top form button {
+    font-size: 2.8vh;
+  }
+  .sidebar .bottom {
+    font-size: 2.4vh;
+  }
+
+  .right {
+    display: none;
+  }
+}
+.info-msg, .success-msg, .warning-msg, .error-msg {
+  margin: 10px 0;
+  padding: 10px;
+  border-radius: 3px 3px 3px 3px;
+}
+
+.info-msg {
+  color: #059;
+  background-color: #BEF;
+}
+
+.success-msg {
+  color: #270;
+  background-color: #DFF2BF;
+}
+
+.warning-msg {
+  color: #9F6000;
+  background-color: #FEEFB3;
+}
+
+.error-msg {
+  color: #D8000C;
+  background-color: #FFBABA;
+}
+
+/*# sourceMappingURL=login.css.map */

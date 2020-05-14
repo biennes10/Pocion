@@ -1,0 +1,136 @@
+{% extends 'user/HAF/base.html.twig' %}
+
+
+{% block title %}Main courante{% endblock %}
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('assets/css/user/haf/handrail.css') }}">
+{% endblock %}
+
+{#SET VARIABLES#}
+{% set page = 'handrail' %}
+{% set default_route = 'handrail' %}
+{% set default_path = path(default_route) %}
+{% set new_route = 'handrail_new' %}
+{% set new_path = path(new_route) %}
+{% if article is defined %}
+    {% set article_route = 'handrail_article' %}
+    {% set article_path = path(article_route, {'handrail': article.id}) %}
+    {% set edit_route = 'handrail_article_edit' %}
+    {% set edit_path = path(edit_route, {'handrail': article.id}) %}
+{% endif %}
+
+{% block title_icon %}<i class="fas fa-chart-bar"></i>{% endblock %}
+{% block page %}{{ page }}{% endblock %}
+
+{#LEFT WRAPPER#}
+{% block thead %}
+    <tr class="row w-100 h-100">
+        <td><p>Type</p></td>
+        <td><p>Objet</p></td>
+        <td><p>Auteur</p></td>
+        <td><p>Date</p></td>
+    </tr>
+{% endblock %}
+
+{% block tbody %}
+    {% if handrails is not empty %}
+        {% for handrail in handrails %}
+            <tr class="row w-100 {% if article is defined and article == handrail %}selected{% endif %}" data-link="{{ path('handrail_article', {'handrail': handrail.id}) }}">
+                <td>
+                    <p>
+                        <i
+                                {% if handrail.urgency == 0 %}
+                                    style="color: #41966F;"
+                                {% elseif handrail.urgency == 1 %}
+                                    style="color: #F6DF44;"
+                                {% elseif handrail.urgency == 2 %}
+                                    style="color: #FFA844;"
+                                {% elseif handrail.urgency == 3 %}
+                                    style="color: #F55A4E;"
+                                {% endif %}
+                                {% if handrail.type == 0 %}
+                                    class="fas fa-info-circle"
+                                {% else %}
+                                    class="fas fa-exclamation-triangle"
+                                {% endif %}
+                        ></i>
+                    </p>
+                </td>
+                <td><p>{{ handrail.subject }}</p></td>
+                <td><p>
+                        {%  if handrail.user == app.user %}
+                            Moi
+                        {% else %}
+                            {{ handrail.user.firstName | first }}. {{ handrail.user.lastName }}
+                        {% endif %}
+
+                    </p>
+                </td>
+                <td><p>{{ handrail.createdAt | date('j/m G:i', 'Europe/Paris') }}</p></td>
+            </tr>
+        {% endfor %}
+    {% endif %}
+{% endblock %}
+
+{#RIGHT WRAPPER#}
+{% block article_title %}{{ article.subject }}{% endblock %}
+{% block article_actions %}
+    {% if article.user == app.user or is_granted('ROLE_ADMIN') %}
+        <a title="Modifier" href="{{ edit_path }}"><i class="fas fa-edit"></i></a>
+        <a title="Supprimer" id="article-delete" href="" data-id="{{ article.id }}"><i class="fas fa-trash"></i></a>
+    {% endif %}
+{% endblock %}
+{% block article %}
+    <p class="article-date">
+        <i class="fas fa-calendar-day"></i>
+        Rédigé le {{ trans_day_hash[article.createdAt | date('l', 'Europe/Paris')] }}{{ article.createdAt | date(' j \\à G\\hi', 'Europe/Paris') }}
+    </p>
+    <p class="article-user">
+        <i class="fas fa-user-edit"></i>
+        Par
+        {% if article.user == app.user %}
+            moi
+        {% else %}
+            {{ article.user.firstName }} {{ article.user.lastName }}
+        {% endif %}
+    </p>
+    <p class="article-project">
+        <i class="fas fa-project-diagram"></i>
+        Projet: {{ article.project.name }}
+    </p>
+    <hr>
+    <div class="article-content h-100">{{ article.content | raw }}</div>
+{% endblock %}
+
+{% block new_form %}
+    {{ form_start(form, {'attr': {'class': 'col-start-center'}}) }}
+    {{ form_row(form.subject) }}
+    {{ form_row(form.project) }}
+    {{ form_row(form.type) }}
+    {{ form_row(form.urgency) }}
+    {{ form_row(form.content) }}
+    <button type="submit">Publier</button>
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block edit_form %}
+    {{ form_start(form, {'attr': {'class': 'col-start-center'}}) }}
+    {{ form_row(form.subject) }}
+    {{ form_row(form.project) }}
+    {{ form_row(form.type) }}
+    {{ form_row(form.urgency) }}
+    {{ form_row(form.content) }}
+    <button type="submit">Mettre à jour</button>
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block delete_script %}
+    <script>
+        $('#article-delete').on('click', function(e) {
+            e.preventDefault();
+            if (confirm("Etes-vous sûr de supprimer cette article?")) {
+                window.location.href = Routing.generate('handrail_article_delete', {'handrail': $(this).data('id')});
+            }
+        });
+    </script>
+{% endblock %}

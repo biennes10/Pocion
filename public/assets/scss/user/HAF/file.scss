@@ -1,0 +1,72 @@
+@import "base";
+
+#file {
+  .title {
+    background-image: linear-gradient(to right, $files-color, darken($files-color, 8%));
+  }
+  .data {
+    table {
+      tr {
+        td {
+          &:nth-child(1) {
+            width: 100%;
+          }
+
+          &:nth-child(2) {
+            width: 25%;
+          }
+
+          &:nth-child(3) {
+            width: 25%
+          }
+
+        }
+      }
+
+      thead, tbody {
+        &::-webkit-scrollbar-thumb {
+          background: $theme-main-color;
+        }
+      }
+
+
+      thead {
+        scrollbar-color: $files-color transparent;
+        &::-webkit-scrollbar-thumb {
+          background: $files-color;
+        }
+        tr {
+          td {
+            p {
+              color: $files-color;
+            }
+          }
+        }
+      }
+
+      tbody {
+        scrollbar-color: $files-color transparent;
+        &::-webkit-scrollbar-thumb {
+          background: $files-color;
+        }
+        .selected {
+          background-color: lighten($files-color, 48%);
+        }
+        tr {
+          &:hover {
+            background-color: lighten($files-color, 34%);
+          }
+
+          td {
+            &:first-child {
+              p {
+
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+

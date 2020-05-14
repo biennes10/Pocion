@@ -1,0 +1,123 @@
+{% extends 'user/HAF/base.html.twig' %}
+
+
+{% block title %}Utilisateurs{% endblock %}
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('assets/css/user/haf/user.css') }}">
+{% endblock %}
+{% block js_start %}
+{% endblock %}
+
+{#SET VARIABLES#}
+{% set page = 'user' %}
+{% set default_route = 'user' %}
+{% set default_path = path(default_route) %}
+{% set new_route = 'user_new' %}
+{% set new_path = path(new_route) %}
+{% if article is defined %}
+    {% set article_route = 'user_article' %}
+    {% set article_path = path(article_route, {'user': article.id}) %}
+    {% set edit_route = 'user_article_edit' %}
+    {% set edit_path = path(edit_route, {'user': article.id}) %}
+{% endif %}
+
+{% block title_icon %}<i class="fas fa-users"></i>{% endblock %}
+{% block page %}{{ page }}{% endblock %}
+
+{#LEFT WRAPPER#}
+{% block thead %}
+    <tr class="row w-100 h-100">
+        <td><p>Nom</p></td>
+        <td><p>Crée le</p></td>
+    </tr>
+{% endblock %}
+{% block tbody %}
+    {% if users is not empty %}
+        {% for user in users %}
+            {% if user is not same as(app.user)  %}
+                <tr class="row w-100 {% if article is defined and article == user %}selected{% endif %}" data-link="{{ path('user_article', {'user': user.id}) }}">
+                    <td>
+                        <p>
+                            {{ user.firstName }} {{ user.lastName }}
+                            {% if user.roles[0] == "ROLE_USER" %}
+                                <span class="user">Utilisateur</span>
+                            {% elseif user.roles[0] == "ROLE_ADMIN" %}
+                                <span class="admin">Admin</span>
+                            {% elseif user.roles[0] == "ROLE_SUPER_ADMIN" %}
+                                <span class="super-admin">Super admin</span>
+                            {% endif %}
+
+                        </p>
+                    </td>
+                    <td><p>{{ user.createdAt | date('j/m G:i', 'Europe/Paris') }}</p></td>
+            </tr>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+{% endblock %}
+
+{#RIGHT WRAPPER#}
+{% block article_title %}{{ article.firstName }} {{ article.lastName }}{% endblock %}
+{% block article_actions %}
+    {% if article == app.user or (is_granted('ROLE_SUPER_ADMIN')) or (is_granted('ROLE_ADMIN') and article.roles[0] == "ROLE_USER") %}
+        <a title="Modifier" href="{{ edit_path }}"><i class="fas fa-edit"></i></a>
+        <a title="Supprimer" id="article-delete" href="" data-id="{{ article.id }}"><i class="fas fa-trash"></i></a>
+    {% endif %}
+{% endblock %}
+
+{% block article %}
+    <p class="article-date">
+        <i class="fas fa-calendar-day"></i>
+        Créé le {{ trans_day_hash[article.createdAt | date('l', 'Europe/Paris')] }}{{ article.createdAt | date(' j \\à G\\hi', 'Europe/Paris') }}
+    </p>
+    <p class="article-info">
+        <i class="fas fa-user-tag"></i>
+        {% if article.roles[0] == "ROLE_USER" %}Utilisateur{% elseif article.roles[0] == "ROLE_ADMIN" %}Administrateur{% elseif article.roles[0] == "ROLE_SUPER_ADMIN" %}Super administrateur{% endif %}
+    </p>
+    <hr>
+    <div class="article-content h-100">
+        <p>Prénom : {{ article.firstName }}</p>
+        <p>Nom : {{ article.lastName }}</p>
+        <p>Date de naissance : {{ article.dateOfBirth | date('d/m/Y') }} ({{ age }} ans)</p>
+        <p>Login: {{ article.username }}</p>
+        <p>Adresse mail: {{ article.email }}</p>
+        <p>Sexe: {% if article.gender == 0 %}Femme{% elseif article.gender == 1 %}Homme{% elseif article.gender == 2 %}Autre{% endif %}</p>
+    </div>
+{% endblock %}
+{% block new_form %}
+    {{ form_start(form, {'attr': {'class': 'col-start-center'}}) }}
+    {{ form_row(form.firstName) }}
+    {{ form_row(form.lastName) }}
+    {{ form_row(form.dateOfBirth) }}
+    {{ form_row(form.username) }}
+    {{ form_row(form.email) }}
+    {{ form_row(form.password) }}
+    {{ form_row(form.gender) }}
+    {{ form_row(form.role) }}
+    <button type="submit">Publier</button>
+    {{ form_end(form) }}
+{% endblock %}
+{% block edit_form %}
+    {{ form_start(form, {'attr': {'class': 'col-start-center'}}) }}
+    {{ form_row(form.firstName) }}
+    {{ form_row(form.lastName) }}
+    {{ form_row(form.dateOfBirth) }}
+    {{ form_row(form.username) }}
+    {{ form_row(form.email) }}
+    {{ form_row(form.password) }}
+    {{ form_row(form.gender) }}
+    {{ form_row(form.role) }}
+    <button type="submit">Mettre à jour</button>
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block delete_script %}
+    <script>
+        $('#article-delete').on('click', function(e) {
+            e.preventDefault();
+            if (confirm("Etes-vous sûr de supprimer cette article?")) {
+                window.location.href = Routing.generate('user_article_delete', {'user': $(this).data('id')});
+            }
+        });
+    </script>
+{% endblock %}

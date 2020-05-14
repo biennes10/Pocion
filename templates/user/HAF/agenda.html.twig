@@ -1,0 +1,172 @@
+{% extends 'user/HAF/base.html.twig' %}
+
+
+{% block title %}Agenda{% endblock %}
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('assets/js/fullcalendar/core/main.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/js/fullcalendar/daygrid/main.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/js/fullcalendar/timegrid/main.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/user/haf/agenda.css') }}">
+{% endblock %}
+{% block js_start %}
+    {% if calendar is defined %}
+
+        <script src="{{ asset('assets/js/fullcalendar/core/main.js') }}"></script>
+        <script src="{{ asset('assets/js/fullcalendar/daygrid/main.js') }}"></script>
+        <script src="{{ asset('assets/js/fullcalendar/timegrid/main.js') }}"></script>
+        <script src="{{ asset('assets/js/fullcalendar/core/locales/fr.js') }}"></script>
+        <script>
+            var calendarEvents = {{ calendar | json_encode | raw }};
+            document.addEventListener('DOMContentLoaded', function() {
+                var calendarEl = document.getElementById('calendar');
+
+                var calendar = new FullCalendar.Calendar(calendarEl, {
+                    lang: 'fr',
+                    plugins: [ 'dayGrid','timeGrid' ],
+                    defaultView: 'timeGridWeek',
+                    header: {
+                        left: 'dayGridMonth,timeGridWeek,timeGridDay',
+                        center: 'title',
+                        right: 'prev,next'
+                    },
+                    events: calendarEvents,
+                    eventClick: function(info) {
+                        info.jsEvent.preventDefault(); // don't let the browser navigate
+
+                        if (info.event.url) {
+                            if (info.even.url !== undefined) {
+                                window.open(info.event.url);
+                            }
+                        }
+                    }
+                });
+
+                calendar.render();
+                calendar.setOption('locale', 'fr');
+            });
+
+        </script>
+    {% endif %}
+{% endblock %}
+
+{#SET VARIABLES#}
+{% set page = 'agenda' %}
+{% set default_route = 'agenda' %}
+{% set default_path = path(default_route) %}
+{% set new_route = 'agenda_new' %}
+{% set new_path = path(new_route) %}
+{% if article is defined %}
+    {% set article_route = 'agenda_article' %}
+    {% set article_path = path(article_route, {'agenda': article.id}) %}
+    {% set edit_route = 'agenda_article_edit' %}
+    {% set edit_path = path(edit_route, {'agenda': article.id}) %}
+{% endif %}
+
+{% block title_icon %}<i class="fas fa-calendar"></i>{% endblock %}
+{% block page %}{{ page }}{% endblock %}
+
+{#LEFT WRAPPER#}
+{% block thead %}
+    <tr class="row w-100 h-100">
+        <td><p>Événement</p></td>
+        <td><p>Auteur</p></td>
+        <td><p>Date</p></td>
+    </tr>
+{% endblock %}
+
+{% block tbody %}
+    {% if agendas is not empty %}
+        {% for agenda in agendas %}
+            <tr class="row w-100 {% if article is defined and article == agenda %}selected{% endif %}" data-link="{{ path('agenda_article', {'agenda': agenda.id}) }}">
+                <td>
+                    <p>
+                        {% if agenda.startAt is not null %}
+                            <small>
+                                    {{ agenda.startAt | date('j/m') }}
+                                    {{ agenda.startAt | date('G:i') }}
+                                    {% if agenda.endAt is not null %}
+                                        - {{ agenda.endAt | date('G:i') }}
+                                    {% endif %}
+                            </small>
+                            :
+                        {% endif %}
+                        {{ agenda.subject }}
+                    </p>
+                </td>
+                <td><p>
+                        {%  if agenda.user == app.user %}
+                            Moi
+                        {% else %}
+                            {{ agenda.user.firstName | first }}. {{ agenda.user.lastName }}
+                        {% endif %}
+
+                    </p>
+                </td>
+                <td><p>{{ agenda.createdAt | date('j/m G:i', 'Europe/Paris') }}</p></td>
+            </tr>
+        {% endfor %}
+    {% endif %}
+{% endblock %}
+
+{#RIGHT WRAPPER#}
+{% block article_title %}{{ article.subject }}{% endblock %}
+{% block article_actions %}
+    {% if article.user == app.user or is_granted('ROLE_ADMIN') %}
+        <a title="Modifier" href="{{ edit_path }}"><i class="fas fa-edit"></i></a>
+        <a title="Supprimer" id="article-delete" href="" data-id="{{ article.id }}"><i class="fas fa-trash"></i></a>
+    {% endif %}
+{% endblock %}
+{% block article %}
+    <p class="article-date">
+        <i class="fas fa-calendar-day"></i>
+        Rédigé le {{ trans_day_hash[article.createdAt | date('l', 'Europe/Paris')] }}{{ article.createdAt | date(' j \\à G\\hi', 'Europe/Paris') }}
+    </p>
+    <p class="article-user">
+        <i class="fas fa-user-edit"></i>
+        Par
+        {% if article.user == app.user %}
+            moi
+        {% else %}
+            {{ article.user.firstName }} {{ article.user.lastName }}
+        {% endif %}
+    </p>
+    <p class="article-project">
+        <i class="fas fa-project-diagram"></i>
+        Projet: {{ article.project.name }}
+    </p>
+    <hr>
+    <div class="article-content h-100">{{ article.content | raw }}</div>
+{% endblock %}
+
+{% block new_form %}
+    {{ form_start(form, {'attr': {'class': 'col-start-center'}}) }}
+    {{ form_row(form.subject) }}
+    {{ form_row(form.project) }}
+    {{ form_row(form.startAt) }}
+    {{ form_row(form.endAt) }}
+    {{ form_row(form.content) }}
+    <button type="submit">Publier</button>
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block edit_form %}
+    {{ form_start(form, {'attr': {'class': 'col-start-center'}}) }}
+    {{ form_row(form.subject) }}
+    {{ form_row(form.project) }}
+    {{ form_row(form.startAt) }}
+    {{ form_row(form.endAt) }}
+    {{ form_row(form.content) }}
+    <button type="submit">Mettre à jour</button>
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block delete_script %}
+    <script>
+        $('#article-delete').on('click', function(e) {
+            e.preventDefault();
+            if (confirm("Etes-vous sûr de supprimer cette article?")) {
+                window.location.href = Routing.generate('agenda_article_delete', {'agenda': $(this).data('id')});
+            }
+        });
+    </script>
+{% endblock %}

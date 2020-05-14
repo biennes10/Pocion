@@ -1,0 +1,272 @@
+@import url("../utilities/pocion.css");
+@import "base";
+
+@include fontface($font-regular, '../../fonts/' + $font-regular-file);
+@include fontface($font-italic, '../../fonts/' + $font-italic-file);
+@include fontface($font-bold, '../../fonts/' + $font-bold-file);
+@include fontface($font-bold-italic, '../../fonts/' + $font-bold-italic-file);
+
+.content {
+   > div {
+      height: calc(50% - #{$padding}/2);
+      section {
+         position: relative;
+         .title-wrapper {
+            position: absolute;
+            top: 0;
+            .title {
+               width: calc(100% - #{$padding});
+               padding: 1.4vh 1.6vh 1.8vh 1.6vh;
+               div {
+                  cursor: default;
+                  font-size: 1.8vh;
+                  color: white;
+                  i {
+                     margin-right: 1vh;
+                     height: auto;
+                     width: auto;
+                  }
+                  a {
+                     width: auto;
+                  }
+               }
+            }
+         }
+         .data {
+            height: 92%;
+            padding: $padding $padding/2;
+            background-color: $wrapper-bg-color;
+            * {
+               min-width: 0;
+            }
+            table {
+               tr {
+                  font-size: 1.8vh;
+                  padding: 0 $padding/2;
+                  td {
+                     display: flex;
+                     align-items: center;
+                     &:not(:last-child) {
+                        padding-right: 0.6vw;
+                     }
+                     p {
+                        width: 100%;
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                     }
+                  }
+               }
+
+               thead, tbody {
+                  overflow-y: scroll;
+                  scrollbar-width: thin;
+                  &::-webkit-scrollbar {
+                     width: 4px;
+                  }
+
+                  &::-webkit-scrollbar-track {
+                     background: transparent;
+                  }
+               }
+
+               thead {
+                  scrollbar-color: transparent transparent;
+                  height: calc(100% / 6);
+                  tr {
+                     height: 100%;
+                     td {
+                        p {
+                           font-family: $font-bold;
+                        }
+                     }
+                  }
+               }
+
+               tbody {
+                  height: 100%;
+                  tr {
+                     cursor: pointer;
+                     min-height: calc(100% / 5);
+                     transition: background-color 0.1s ease-in-out;
+                     td {
+                        p {
+                           color: $wrapper-text-color;
+                        }
+                     }
+                  }
+               }
+            }
+         }
+      }
+   }
+}
+
+#handrail {
+   width: calc(50% - #{$padding}/2);
+   .title {
+      background-image: linear-gradient(to right, $handrail-color, darken($handrail-color, 8%));
+   }
+   .data {
+      table {
+         tr {
+            td {
+               &:nth-child(1) {
+                  width: 15%;
+               }
+               &:nth-child(2) {
+                  width: 100%;
+               }
+               &:nth-child(3) {
+                  width: 25%
+               }
+               &:nth-child(4) {
+                  width: 25%;
+               }
+            }
+         }
+         thead {
+            tr {
+               td {
+                  p {
+                     color: $handrail-color;
+                  }
+               }
+            }
+         }
+         tbody {
+            scrollbar-color: $handrail-color transparent;
+            &::-webkit-scrollbar-thumb {
+               background: lighten($handrail-color, 10%);
+            }
+            &::-webkit-scrollbar-thumb:hover {
+               background: $handrail-color;
+            }
+            tr {
+               &:hover {
+                  background-color: lighten($handrail-color, 40%);
+               }
+               td {
+                  &:first-child {
+                     p {
+                        height: 100%;
+                        width: 100%;
+                        i {
+                           height: 100%;
+                           display: flex;
+                           justify-content: center;
+                           align-items: center;
+                        }
+                     }
+                  }
+               }
+            }
+         }
+      }
+   }
+}
+
+#agenda {
+   width: calc(50% - #{$padding}/2);
+   .title {
+      background-image: linear-gradient(to right, $agenda-color, darken($agenda-color, 8%));
+   }
+   .data {
+      table {
+         tr {
+            td {
+               &:nth-child(1) {
+                  width: 100%;
+               }
+               &:nth-child(2) {
+                  width: 25%;
+               }
+               &:nth-child(3) {
+                  width: 25%;
+               }
+            }
+         }
+         thead {
+            tr {
+               td {
+                  p {
+                     color: $agenda-color;
+                  }
+               }
+            }
+         }
+         tbody {
+            scrollbar-color: $agenda-color transparent;
+            &::-webkit-scrollbar-thumb {
+               background: lighten($agenda-color, 10%);
+            }
+            &::-webkit-scrollbar-thumb:hover {
+               background: $agenda-color;
+            }
+            tr {
+               &:hover {
+                  background-color: lighten($agenda-color, 30%);
+               }
+               small {
+                  font-family: $font-bold;
+                  color: #626262;
+               }
+            }
+         }
+      }
+   }
+}
+
+#files {
+   .title {
+      background-image: linear-gradient(to right, $files-color, darken($files-color, 8%));
+   }
+   .data {
+      table {
+         tr {
+            td {
+               &:nth-child(1) {
+                  width: 100%;
+               }
+               &:nth-child(2) {
+                  width: 12vw;
+               }
+               &:nth-child(3) {
+                  width: 8vw;
+               }
+            }
+         }
+         thead {
+            tr {
+               td {
+                  p {
+                     color: $files-color;
+                  }
+               }
+            }
+         }
+         tbody {
+            scrollbar-color: $files-color transparent;
+            &::-webkit-scrollbar-thumb {
+               background: lighten($files-color, 10%);
+            }
+            &::-webkit-scrollbar-thumb:hover {
+               background: $files-color;
+            }
+            tr {
+               &:hover {
+                  background-color: lighten($files-color, 40%);
+               }
+            }
+         }
+      }
+   }
+}
+
+.right-large {
+      width: 100%;
+   }
+.right-medium {
+      width: calc(100% - #{$sidebar-width});
+   }
+

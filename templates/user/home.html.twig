@@ -1,0 +1,189 @@
+{% extends 'user/base.html.twig' %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('assets/css/user/home.css') }}">
+{% endblock %}
+
+{% block body %}
+    <div class="row-between">
+        <section id="handrail" class="col-end h-100">
+            <div class="title-wrapper row-center w-100">
+                <div class="title row-between-center rounded shadow">
+                    <div>
+                        <i class="fas fa-chart-bar"></i>
+                        Main courante
+                    </div>
+                    <div>
+                        {% if is_granted('ROLE_USER') %}
+                            <a href="{{ path('handrail_new') }}"><i class="fas fa-plus"></i></a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="data w-100 shadow">
+                <table class="col w-100 h-100">
+                    <thead class="col-start">
+                        <tr class="row w-100">
+                            <td><p>Type</p></td>
+                            <td><p>Objet</p></td>
+                            <td><p>Auteur</p></td>
+                            <td><p>Date</p></td>
+                        </tr>
+                    </thead>
+                    <tbody class="col-start h-100">
+                        {% if handrails is not empty %}
+                            {% for handrail in handrails %}
+                                <tr class="row w-100" data-link="{{ path('handrail_article', {'handrail': handrail.id}) }}">
+                                    <td>
+                                        <p>
+                                            <i
+                                                    {% if handrail.urgency == 0 %}
+                                                        style="color: #41966F;"
+                                                    {% elseif handrail.urgency == 1 %}
+                                                        style="color: #F6DF44;"
+                                                    {% elseif handrail.urgency == 2 %}
+                                                        style="color: #FFA844;"
+                                                    {% elseif handrail.urgency == 3 %}
+                                                        style="color: #F55A4E;"
+                                                    {% endif %}
+                                                    {% if handrail.type == 0 %}
+                                                        class="fas fa-info-circle"
+                                                    {% else %}
+                                                        class="fas fa-exclamation-triangle"
+                                                    {% endif %}
+                                            ></i>
+                                        </p>
+                                    </td>
+                                    <td><p>{{ handrail.subject }}</p></td>
+                                    <td><p>
+                                            {%  if handrail.user == app.user %}
+                                                Moi
+                                            {% else %}
+                                                {{ handrail.user.firstName | first }}. {{ handrail.user.lastName }}
+                                            {% endif %}
+
+                                        </p>
+                                    </td>
+                                    <td><p>{{ handrail.createdAt | date('j/m G\\hi', 'Europe/Paris') }}</p></td>
+                                </tr>
+                            {% endfor %}
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        <section id="agenda" class="col-end h-100">
+            <div class="title-wrapper row-center w-100">
+                <div class="title row-between-center rounded shadow">
+                    <div>
+                        <i class="fas fa-calendar"></i>Agenda
+                    </div>
+                    <div>
+                        {% if is_granted('ROLE_USER') %}
+                            <a href="{{ path('agenda_new') }}"><i class="fas fa-plus"></i></a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="data w-100 shadow">
+                <table class="col w-100 h-100">
+                    <thead class="col-start">
+                    <tr class="row w-100">
+                        <td><p>Événement</p></td>
+                        <td><p>Auteur</p></td>
+                        <td><p>Date</p></td>
+                    </tr>
+                    </thead>
+                    <tbody class="col-start">
+                        {% if agenda is not empty %}
+                            {% for a in agenda %}
+                                <tr class="row w-100" data-link="{{ path('agenda_article', {'agenda': a.id}) }}">
+                                    <td><p>
+                                            {% if a.startAt is not null %}
+                                                <small>
+                                                        {{ a.startAt | date('j/m') }}
+                                                        {{ a.startAt | date('G:i') }}
+                                                        {% if a.endAt is not null %}
+                                                            - {{ a.endAt | date('G:i') }}
+                                                        {% endif %}
+                                                </small>
+                                                :
+                                            {% endif %}
+                                            {{ a.subject }}
+                                        </p>
+                                    </td>
+                                    <td><p>
+                                            {%  if a.user == app.user %}
+                                                Moi
+                                            {% else %}
+                                                {{ a.user.firstName | first }}. {{ a.user.lastName }}
+                                            {% endif %}
+
+                                        </p>
+                                    </td>
+                                    <td><p>{{ a.createdAt | date('j/m G:i', 'Europe/Paris') }}</p></td>
+                                </tr>
+                            {% endfor %}
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+    <div>
+        <section id="files" class="col-end h-100">
+            <div class="title-wrapper row-center w-100">
+                <div class="title row-between-center rounded shadow">
+                    <div>
+                        <i class="fas fa-archive"></i>Base documentaire
+                    </div>
+                    <div>
+                        {% if is_granted('ROLE_USER') %}
+                            <a href="{{ path('file_new') }}"><i class="fas fa-plus"></i></a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="data w-100 shadow">
+                <table class="col w-100 h-100">
+                    <thead class="col-start">
+                    <tr class="row w-100">
+                        <td><p>Document</p></td>
+                        <td><p>Auteur</p></td>
+                        <td><p>Date</p></td>
+                    </tr>
+                    </thead>
+                    <tbody class="col-start">
+                        {% if files is not empty %}
+                            {% for file in files %}
+                                <tr class="row w-100 {% if article is defined and article == file %}selected{% endif %}" data-link="{{ path('file_article', {'file': file.id}) }}">
+                                    <td>
+                                        <p>
+                                            {{ file.subject }}
+                                        </p>
+                                    </td>
+                                    <td><p>
+                                            {%  if file.user == app.user %}
+                                                Moi
+                                            {% else %}
+                                                {{ file.user.firstName | first }}. {{ file.user.lastName }}
+                                            {% endif %}
+
+                                        </p>
+                                    </td>
+                                    <td><p>{{ file.createdAt | date(' j/m G\\hi', 'Europe/Paris') }}</p></td>
+                                </tr>
+                            {% endfor %}
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+{% endblock %}
+
+{% block js_end %}
+
+{% endblock %}

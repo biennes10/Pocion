@@ -1,0 +1,42 @@
+
+$topbar-height: 10vh;
+$padding: 4vh;
+
+
+$theme-main-color: #24B8CC;
+$theme-second-color: #1F1D23;
+$theme-dgac-color: #0f218b;
+
+$handrail-color: #7B5D93;
+$agenda-color: #F55A4E;
+$files-color: #41966F;
+$projets-color: #9b1811;
+$profile-color: #1575b5;
+
+/* COULEUR MENU */
+$topbar-text-color: #606478;
+
+/* NAV */
+$sidebar-width: 30vh;
+$nav-bg-color: #fbfbfc;
+$nav-text-color: #606478;
+
+/* WRAPPER */
+$wrapper-bg-color: #fbfbfc;
+$wrapper-text-color: darken(#606478, 10%);
+
+/* COULEUR FOND DE PAGE */
+$document-bg: darken(#fbfbfc, 6%);
+
+/* FONTS (Chemins relatifs en partant de public/assets/fonts/) */
+$font-regular: 'Circular Regular';
+$font-regular-file: 'circular/lineto-circular-pro-medium';
+
+$font-italic: 'Circular Italic';
+$font-italic-file: 'circular/lineto-circular-pro-mediumItalic';
+
+$font-bold: 'Circular Bold';
+$font-bold-file: 'circular/lineto-circular-pro-bold';
+
+$font-bold-italic: 'Circular Bold Italic';
+$font-bold-italic-file: 'circular/lineto-circular-pro-boldItalic';

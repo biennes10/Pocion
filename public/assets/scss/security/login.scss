@@ -1,0 +1,159 @@
+@import "../utilities/base";
+
+@include fontface($font-regular, '../../fonts/' + $font-regular-file);
+@include fontface($font-italic, '../../fonts/' + $font-italic-file);
+@include fontface($font-bold, '../../fonts/' + $font-bold-file);
+@include fontface($font-bold-italic, '../../fonts/' + $font-bold-italic-file);
+
+$sidebar-width: 40vh;
+
+.document-wrapper {
+   height: 100%;
+   width: 100%;
+}
+
+.document-wrapper {
+   display: flex;
+   flex-direction: row;
+   position: relative;
+}
+
+.sidebar {
+   position: relative;
+   z-index: 2;
+   width: $sidebar-width;
+   height: 100%;
+   padding: 3vh;
+   display: flex;
+   flex-direction: column;
+   justify-content: space-between;
+   .top {
+      form {
+         margin-top: 2vh;
+         width: 100%;
+         input, button {
+            width: 100%;
+            padding: 1.7vh 1.8vh 1.8vh 1.8vh;
+            border: none;
+            font-size: 1.8vh;
+            outline: none;
+         }
+         input {
+            background-color: #f1f1f1;
+            border: 1px solid #f1f1f1;
+            margin-bottom: 1vh;
+            transition: background-color 0.2s ease;
+            &:focus {
+               background-color: #fcfcfc;
+            }
+         }
+         button {
+            background-color: $theme-main-color;
+            color: white;
+            border-bottom: 4px solid #1fa1b2;
+         }
+      }
+   }
+   .bottom {
+      font-size: 1.6vh;
+      .links {
+         margin-bottom: 2vh;
+         a {
+            color: #979797;
+            transition: all 0.2s ease-in-out;
+            &:hover {
+               text-decoration: underline;
+            }
+         }
+         .admin-link {
+            color: $theme-main-color;
+         }
+      }
+      .logos {
+         display: flex;
+         flex-direction: row;
+         justify-content: space-around;
+         img {
+            height: 10vh;
+         }
+      }
+   }
+}
+
+.right {
+   position: relative;
+   overflow: hidden;
+   z-index: 1;
+   height: 100%;
+   width: calc(100% - #{$sidebar-width});
+   background-image: radial-gradient(#ffffff, $theme-main-color);
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   img {
+      position: relative;
+      height: 60%;
+      @keyframes bumpimg {
+         0%   { height: 60%; }
+         50%  { height: 64%; }
+         100% {height: 60%; }
+      }
+   }
+   &:hover img {
+      animation: bumpimg 3s infinite;
+   }
+}
+
+@include respond-to(handhelds) {
+   .sidebar {
+      width: 100%;
+      .top {
+         form {
+            margin-top: 10vh;
+            input, button {
+               font-size: 2.8vh;
+            }
+         }
+      }
+      .bottom {
+         font-size: 2.4vh;
+      }
+   }
+
+   .right {
+      display: none;
+   }
+}
+
+@include respond-to(medium-screens) {
+
+}
+
+@import url('//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css');
+
+.info-msg, .success-msg, .warning-msg, .error-msg {
+   margin: 10px 0;
+   padding: 10px;
+   border-radius: 3px 3px 3px 3px;
+}
+
+.info-msg {
+   color: #059;
+   background-color: #BEF;
+}
+
+.success-msg {
+   color: #270;
+   background-color: #DFF2BF;
+}
+
+.warning-msg {
+   color: #9F6000;
+   background-color: #FEEFB3;
+}
+
+.error-msg {
+   color: #D8000C;
+   background-color: #FFBABA;
+}
+

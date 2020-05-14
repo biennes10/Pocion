@@ -1,0 +1,111 @@
+{% extends 'user/HAF/base.html.twig' %}
+
+
+{% block title %}Base documentaire{% endblock %}
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('assets/css/user/haf/file.css') }}">
+{% endblock %}
+
+{#SET VARIABLES#}
+{% set page = 'file' %}
+{% set default_route = 'file' %}
+{% set default_path = path(default_route) %}
+{% set new_route = 'file_new' %}
+{% set new_path = path(new_route) %}
+{% if article is defined %}
+    {% set article_route = 'file_article' %}
+    {% set article_path = path(article_route, {'file': article.id}) %}
+    {% set edit_route = 'file_article_edit' %}
+    {% set edit_path = path(edit_route, {'file': article.id}) %}
+{% endif %}
+
+{% block title_icon %}<i class="fas fa-archive"></i>{% endblock %}
+{% block page %}{{ page }}{% endblock %}
+
+{#LEFT WRAPPER#}
+{% block thead %}
+    <tr class="row w-100 h-100">
+        <td><p>Document</p></td>
+        <td><p>Auteur</p></td>
+        <td><p>Date</p></td>
+    </tr>
+{% endblock %}
+{% block tbody %}
+    {% if files is not empty %}
+        {% for file in files %}
+            <tr class="row w-100 {% if article is defined and article == file %}selected{% endif %}" data-link="{{ path('file_article', {'file': file.id}) }}">
+                <td>
+                    <p>
+                        {{ file.subject }}
+                    </p>
+                </td>
+                <td><p>
+                        {%  if file.user == app.user %}
+                            Moi
+                        {% else %}
+                            {{ file.user.firstName | first }}. {{ file.user.lastName }}
+                        {% endif %}
+
+                    </p>
+                </td>
+                <td><p>{{ file.createdAt | date('j/m G:i', 'Europe/Paris') }}</p></td>
+            </tr>
+        {% endfor %}
+    {% endif %}
+{% endblock %}
+
+{#RIGHT WRAPPER#}
+{% block article_title %}{{ article.subject }}{% endblock %}
+{% block article_actions %}
+    {% if article.user == app.user or is_granted('ROLE_ADMIN') %}
+        <a title="Modifier" href="{{ edit_path }}"><i class="fas fa-edit"></i></a>
+        <a title="Supprimer" id="article-delete" href="" data-id="{{ article.id }}"><i class="fas fa-trash"></i></a>
+    {% endif %}
+{% endblock %}
+{% block article %}
+    <p class="article-date">
+        <i class="fas fa-calendar-day"></i>
+        Rédigé le {{ trans_day_hash[article.createdAt | date('l', 'Europe/Paris')] }}{{ article.createdAt | date(' j \\à G\\hi', 'Europe/Paris') }}
+    </p>
+    <p class="article-user">
+        <i class="fas fa-user-edit"></i>
+        Par
+        {% if article.user == app.user %}
+            moi
+        {% else %}
+            {{ article.user.firstName }} {{ article.user.lastName }}
+        {% endif %}
+    </p>
+    <p class="article-project">
+        <i class="fas fa-project-diagram"></i>
+        Projet: {{ article.project.name }}
+    </p>
+    <hr>
+    <div class="article-content h-100"><a href="{{ asset('uploads/files/' ~ article.url) }}">Télécharger</a></div>
+{% endblock %}
+{% block new_form %}
+    {{ form_start(form, {'attr': {'class': 'col-start-center'}}) }}
+    {{ form_row(form.subject) }}
+    {{ form_row(form.project) }}
+    {{ form_row(form.url) }}
+    <button type="submit">Publier</button>
+    {{ form_end(form) }}
+{% endblock %}
+{% block edit_form %}
+    {{ form_start(form, {'attr': {'class': 'col-start-center'}}) }}
+    {{ form_row(form.subject) }}
+    {{ form_row(form.project) }}
+    <button type="submit">Mettre à jour</button>
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block delete_script %}
+    <script>
+        $('#article-delete').on('click', function(e) {
+            e.preventDefault();
+            if (confirm("Etes-vous sûr de supprimer cette article?")) {
+                window.location.href = Routing.generate('file_article_delete', {'file': $(this).data('id')});
+            }
+        });
+    </script>
+{% endblock %}

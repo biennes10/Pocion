@@ -1,0 +1,184 @@
+{% extends 'user/base.html.twig' %}
+
+{% block title %} Mon Profil {% endblock %}
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('assets/css/user/profile.css') }}">
+{% endblock %}
+
+{% block body %}
+    {% for message in app.flashes('success') %}
+        <div class="success-msg"><i class="fa fa-check"></i><span class="msg-message">{{ message }}</span></div>
+    {% endfor %}
+    {% for message in app.flashes('danger') %}
+        <div class="error-msg"><i class="fa fa-times-circle"></i><span class="msg-message">{{ message }}</span></div>
+    {% endfor %}
+    <div class="row-between w-100 h-100">
+        <section id="profile" class="left-wrapper col-end h-100">
+            <div class="title-wrapper">
+                <div class="title row-between-center rounded shadow">
+                    <div>
+                        <i class="fas fa-user"></i> Mon Profil
+                    </div>
+                    <div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="data w-100 shadow">
+                <table>
+                    <thead class="col-start-start">
+                    <tr class="row w-100 h-100">
+                        <td><p>Champ</p></td>
+                        <td><p></p></td>
+                        <td><p>Valeur</p></td>
+
+                    </tr>
+                    </thead>
+                    <tbody class="col-start-start">
+
+
+                            <tr class="row w-100 {% if field is defined and field == "username" %}selected{% endif %}" data-link="{{ path('profile_edit', {'field': 'username'}) }}">
+                                <td>
+                                    <p>
+                                        Login
+                                    </p>
+                                </td>
+                                <td><p></p></td>
+                                <td><p>
+                                        {{ app.user.username }}
+
+                                    </p>
+                                </td>
+
+                            </tr>
+
+                            <tr class="row w-100 {% if field is defined and field == "email" %}selected{% endif %}" data-link="{{ path('profile_edit', {'field': 'email'}) }}">
+                                <td>
+                                    <p>
+                                        Email
+                                    </p>
+                                </td>
+                                <td><p></p></td>
+                                <td><p>
+                                        {{ app.user.email }}
+
+                                    </p>
+                                </td>
+                            </tr>
+
+                            <tr class="row w-100 {% if field is defined and field == "password" %}selected{% endif %}" data-link="{{ path('profile_edit', {'field': 'password'}) }}">
+                                <td>
+                                    <p>
+                                       Pass
+                                    </p>
+                                </td>
+                                <td><p></p></td>
+                                <td><p>
+                                        Secret
+
+                                    </p>
+                                </td>
+                            </tr>
+                            <tr class="row w-100 {% if field is defined and field == "last_name" %}selected{% endif %}" data-link="{{ path('profile_edit', {'field': 'last_name'}) }}">
+                                <td>
+                                    <p>
+                                        Nom
+                                    </p>
+                                </td>
+                                <td><p></p></td>
+                                <td><p>
+                                        {{ app.user.lastName }}
+
+                                    </p>
+                                </td>
+                            </tr>
+                            <tr class="row w-100 {% if field is defined and field == "first_name" %}selected{% endif %}" data-link="{{ path('profile_edit', {'field': 'first_name'}) }}">
+                                <td>
+                                    <p>
+                                        Prénom
+                                    </p>
+                                </td>
+                                <td><p></p></td>
+                                <td><p>
+                                        {% if app.user.firstName is not null %}
+                                        {{ app.user.firstName }}
+                                        {% else %}
+                                        Pas encore défini
+                                        {% endif %}
+
+                                    </p>
+                                </td>
+                            </tr>
+                            <tr class="row w-100 {% if field is defined and field == "phone_number" %}selected{% endif %}" data-link="{{ path('profile_edit', {'field': 'phone_number'}) }}">
+                                <td>
+                                    <p>
+                                        Numéro de téléphone
+                                    </p>
+                                </td>
+                                <td><p></p></td>
+                                <td><p>
+                                        {% if app.user.phoneNumber is not null %}
+                                            {{ app.user.phoneNumber }}
+                                        {% else %}
+                                            Pas encore défini
+                                        {% endif %}
+
+                                    </p>
+                                </td>
+                            </tr>
+                            <tr class="row w-100 {% if field is defined and field == "location" %}selected{% endif %}" data-link="{{ path('profile_edit', {'field': 'location'}) }}">
+                                <td>
+                                    <p>
+                                        Localisation
+                                    </p>
+                                </td>
+                                <td><p></p></td>
+                                <td><p>
+                                        {% if app.user.location is not null %}
+                                            {{ app.user.location }}
+                                        {% else %}
+                                            Pas encore défini
+                                        {% endif %}
+
+                                    </p>
+                                </td>
+                            </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="right-wrapper">
+            <div class="title-wrapper">
+                {% if field is defined%}
+                    <div class="title form row-between-center rounded shadow">
+
+                            <a title="Fermer" href="{{ 'profile' }}"><i class="fas fa-times"></i></a>
+
+                    </div>
+
+                {% endif %}
+            </div>
+            <div class="data shadow">
+                {% if field is defined %}
+
+                        <div class="form-wrapper">
+                            {{ form_start(form, {'attr': {'class': 'col-start-center'}}) }}
+                            {{ form_widget(form) }}
+                            <button type="submit">Publier</button>
+                            {{ form_end(form) }}
+                        </div>
+
+
+                {% else %}
+                    <div class="empty-wrapper w-100 h-100 row-center-center"><i class="fas fa-ellipsis-h"></i></div>
+                {% endif %}
+            </div>
+        </section>
+    </div>
+{% endblock %}
+
+{% block js_end %}
+    {% block delete_script %}{% endblock %}
+{% endblock %}

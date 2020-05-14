@@ -1,0 +1,101 @@
+{% extends 'user/HAF/base.html.twig' %}
+
+
+{% block title %}Projets{% endblock %}
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('assets/css/user/haf/projet.css') }}">
+{% endblock %}
+{% block js_start %}
+{% endblock %}
+
+{#SET VARIABLES#}
+{% set page = 'projet' %}
+{% set default_route = 'projet' %}
+{% set default_path = path(default_route) %}
+{% set new_route = 'projet_new' %}
+{% set new_path = path(new_route) %}
+{% if article is defined %}
+    {% set article_route = 'projet_article' %}
+    {% set article_path = path(article_route, {'projet': article.id}) %}
+    {% set edit_route = 'projet_article_edit' %}
+    {% set edit_path = path(edit_route, {'projet': article.id}) %}
+{% endif %}
+
+{% block title_icon %}<i class="fas fa-project-diagram"></i>{% endblock %}
+{% block page %}{{ page }}{% endblock %}
+
+{#LEFT WRAPPER#}
+{% block thead %}
+    <tr class="row w-100 h-100">
+        <td><p>Nom</p></td>
+        <td><p>Status</p></td>
+    </tr>
+{% endblock %}
+{% block tbody %}
+    {% if projets is not empty %}
+        {% for projet in projets %}
+                <tr class="row w-100 {% if article is defined and article == projet %}selected{% endif %}" data-link="{{ path('projet_article', {'projet': projet.id}) }}">
+                    <td>
+                        <p>
+                            {{ projet.name }}
+
+                        </p>
+                    </td>
+                    <td><p>{% if projet.status == 0 %} En cours {% else %} Complété {% endif %}</p></td>
+                </tr>
+
+        {% endfor %}
+    {% endif %}
+{% endblock %}
+
+{#RIGHT WRAPPER#}
+{% block article_title %}{{ article.name }}{% endblock %}
+{% block article_actions %}
+    {% if (is_granted('ROLE_SUPER_ADMIN')) or app.user == article.author %}
+        <a title="Modifier" href="{{ edit_path }}"><i class="fas fa-edit"></i></a>
+        <a title="Supprimer" id="article-delete" href="" data-id="{{ article.id }}"><i class="fas fa-trash"></i></a>
+    {% endif %}
+{% endblock %}
+
+{% block article %}
+    <p class="article-date">
+        <i class="fas fa-calendar-day"></i>
+        Créé le {{ trans_day_hash[article.createdAt | date('l', 'Europe/Paris')] }}{{ article.createdAt | date(' j \\à G\\hi', 'Europe/Paris') }}
+    </p>
+    <p class="article-info">
+        <i class="fas fa-user-tag"></i>
+        Auteur du projet : {{ article.author.firstName }} {{ article.author.lastName }}
+    </p>
+    <hr>
+    <div class="article-content h-100">
+        <p>Nom : {{ article.name }}</p>
+        <p>Auteur : {{ article.author.username }}</p>
+    </div>
+{% endblock %}
+{% block new_form %}
+    {{ form_start(form, {'attr': {'class': 'col-start-center'}}) }}
+    {{ form_row(form.name) }}
+    {{ form_row(form.status) }}
+    {{ form_row(form.participants) }}
+    <button type="submit">Publier</button>
+    {{ form_end(form) }}
+{% endblock %}
+{% block edit_form %}
+    {{ form_start(form, {'attr': {'class': 'col-start-center'}}) }}
+    {{ form_row(form.name) }}
+    {{ form_row(form.status) }}
+    {{ form_row(form.participants) }}
+    <button type="submit">Mettre à jour</button>
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block delete_script %}
+    <script>
+        $('#article-delete').on('click', function(e) {
+            e.preventDefault();
+            if (confirm("Etes-vous sûr de supprimer cette article?")) {
+                window.location.href = Routing.generate('project_article_delete', {'projet': $(this).data('id')});
+            }
+        });
+    </script>
+{% endblock %}

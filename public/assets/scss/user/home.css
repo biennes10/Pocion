@@ -1,0 +1,692 @@
+@import url("../utilities/pocion.css");
+/* COULEUR MENU */
+/* NAV */
+/* WRAPPER */
+/* COULEUR FOND DE PAGE */
+/* FONTS (Chemins relatifs en partant de public/assets/fonts/) */
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "Circular Regular";
+  -webkit-appearance: none;
+}
+
+input {
+  border-radius: 0;
+}
+
+a, i {
+  color: inherit;
+  text-decoration: none;
+  width: inherit;
+  height: inherit;
+  display: inherit;
+}
+
+li {
+  list-style-type: none;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+}
+
+.preload * {
+  -webkit-transition: none !important;
+  -moz-transition: none !important;
+  -ms-transition: none !important;
+  -o-transition: none !important;
+}
+
+.sidebar {
+  z-index: 1;
+  height: 100%;
+  width: 30vh;
+  padding: 2vh;
+  background-color: #fbfbfc;
+}
+
+.sidebar .top {
+  padding: 0vh 1vh;
+  height: 4vh;
+}
+
+.sidebar .top a, .sidebar .top div {
+  display: flex;
+  align-items: center;
+}
+
+.sidebar .top #burger {
+  height: 70%;
+}
+
+.sidebar .top #burger i {
+  font-size: 2vh;
+  cursor: pointer;
+}
+
+.sidebar nav {
+  margin-top: 4vh;
+}
+
+.sidebar nav ul li {
+  font-size: 1.8vh;
+  cursor: default;
+  color: #606478;
+  transition: color 0.1s ease-in-out;
+}
+
+.sidebar nav ul li a {
+  background-color: transparent;
+  padding: 1.4vh 1.6vh 1.8vh 1.6vh;
+  transition: background-color 0.1s ease-in-out;
+}
+
+.sidebar nav ul li a i {
+  margin-right: 1vh;
+}
+
+.sidebar nav ul li:not(:last-child) {
+  margin-bottom: 1vh;
+}
+
+.sidebar nav ul li:not(.active) {
+  transition: all 0.1s ease-in-out;
+}
+
+.sidebar nav ul li:not(.active) a i {
+  color: #bfc1cc;
+  transition: color 0.1s ease-in-out;
+}
+
+.sidebar nav ul li:not(.active):hover {
+  color: #494c5c;
+}
+
+.sidebar nav ul li:not(.active):hover a {
+  background-color: #efeff3;
+}
+
+.sidebar nav ul li:not(.active):hover a i {
+  color: #b1b3c0;
+}
+
+.sidebar nav ul .active {
+  background-image: linear-gradient(to right, #24B8CC, #20a4b6);
+  color: white;
+}
+
+#side-content {
+  overflow: hidden;
+  z-index: 0;
+  background-color: #eaeaef;
+}
+
+#side-content #top-bar {
+  height: 10vh;
+  padding: 0 4vh;
+}
+
+#side-content #top-bar #top-bar-left h2 {
+  font-size: 2vh;
+  font-weight: normal;
+  color: #606478;
+}
+
+#side-content #top-bar #top-bar-left h2 i {
+  cursor: pointer;
+  margin-right: 0.4vw;
+}
+
+#side-content #top-bar #top-bar-right form {
+  margin-right: 2vw;
+}
+
+#side-content #top-bar #top-bar-right form input, #side-content #top-bar #top-bar-right form button {
+  font-size: 1.8vh;
+  border: none;
+}
+
+#side-content #top-bar #top-bar-right form input {
+  width: 10vw;
+  background-color: transparent;
+  color: #606478;
+  padding: 0.6vh 0;
+  outline: none;
+  border-bottom: 2px solid #9498aa;
+  transition: width 0.1s ease-in-out;
+}
+
+#side-content #top-bar #top-bar-right form input:focus {
+  width: 15vw;
+}
+
+#side-content #top-bar #top-bar-right form button {
+  height: 5vh;
+  width: 5vh;
+  background-color: #fbfbfc;
+  border-radius: 100%;
+  cursor: pointer;
+  transition: transform 0.05s ease-in-out;
+}
+
+#side-content #top-bar #top-bar-right form button:hover {
+  transform: scale(1.1);
+}
+
+#side-content #top-bar #top-bar-right form button i {
+  color: #606478;
+  border-radius: 100%;
+}
+
+#side-content #top-bar #top-bar-right .fa-user {
+  font-size: 2vh;
+  color: #606478;
+}
+
+#side-content #top-bar #top-bar-right #user-menu {
+  position: absolute;
+  background-color: white;
+  z-index: 10;
+}
+
+#side-content #top-bar #top-bar-right #user-menu a {
+  padding: 1vh;
+  font-size: 1.6vh;
+}
+
+#side-content .content {
+  height: calc(100% - 10vh);
+  padding: 4vh;
+}
+
+.right-large {
+  width: 100%;
+}
+
+.right-medium {
+  width: calc(100% - 30vh);
+}
+
+#search-result {
+  position: absolute;
+  background-color: white;
+  transition: all 0.1s ease-in-out;
+  z-index: 20;
+  padding: 1vh;
+  display: none;
+}
+
+#search-result ul li {
+  font-size: 2vh;
+  cursor: pointer;
+  padding: 1vh;
+}
+
+.search-cat {
+  font-family: "Circular Bold";
+  font-size: 1.8vh;
+}
+
+#search-handrail .search-cat {
+  color: #7B5D93;
+}
+
+#search-agenda .search-cat {
+  color: #F55A4E;
+}
+
+#search-files .search-cat {
+  color: #41966F;
+}
+
+@font-face {
+  font-family: "Circular Regular";
+  src: url("../../fonts/circular/lineto-circular-pro-medium.eot?") format("eot"), url("../../fonts/circular/lineto-circular-pro-medium.woff2") format("woff2"), url("../../fonts/circular/lineto-circular-pro-medium.woff") format("woff"), url("../../fonts/circular/lineto-circular-pro-medium.ttf") format("truetype"), url("../../fonts/circular/lineto-circular-pro-medium.svg#Circular_Regular") format("svg");
+}
+@font-face {
+  font-family: "Circular Italic";
+  src: url("../../fonts/circular/lineto-circular-pro-mediumItalic.eot?") format("eot"), url("../../fonts/circular/lineto-circular-pro-mediumItalic.woff2") format("woff2"), url("../../fonts/circular/lineto-circular-pro-mediumItalic.woff") format("woff"), url("../../fonts/circular/lineto-circular-pro-mediumItalic.ttf") format("truetype"), url("../../fonts/circular/lineto-circular-pro-mediumItalic.svg#Circular_Italic") format("svg");
+}
+@font-face {
+  font-family: "Circular Bold";
+  src: url("../../fonts/circular/lineto-circular-pro-bold.eot?") format("eot"), url("../../fonts/circular/lineto-circular-pro-bold.woff2") format("woff2"), url("../../fonts/circular/lineto-circular-pro-bold.woff") format("woff"), url("../../fonts/circular/lineto-circular-pro-bold.ttf") format("truetype"), url("../../fonts/circular/lineto-circular-pro-bold.svg#Circular_Bold") format("svg");
+}
+@font-face {
+  font-family: "Circular Bold Italic";
+  src: url("../../fonts/circular/lineto-circular-pro-boldItalic.eot?") format("eot"), url("../../fonts/circular/lineto-circular-pro-boldItalic.woff2") format("woff2"), url("../../fonts/circular/lineto-circular-pro-boldItalic.woff") format("woff"), url("../../fonts/circular/lineto-circular-pro-boldItalic.ttf") format("truetype"), url("../../fonts/circular/lineto-circular-pro-boldItalic.svg#Circular_Bold_Italic") format("svg");
+}
+.content > div {
+  height: calc(50% - 4vh/2);
+}
+
+.content > div section {
+  position: relative;
+}
+
+.content > div section .title-wrapper {
+  position: absolute;
+  top: 0;
+}
+
+.content > div section .title-wrapper .title {
+  width: calc(100% - 4vh);
+  padding: 1.4vh 1.6vh 1.8vh 1.6vh;
+}
+
+.content > div section .title-wrapper .title div {
+  cursor: default;
+  font-size: 1.8vh;
+  color: white;
+}
+
+.content > div section .title-wrapper .title div i {
+  margin-right: 1vh;
+  height: auto;
+  width: auto;
+}
+
+.content > div section .title-wrapper .title div a {
+  width: auto;
+}
+
+.content > div section .data {
+  height: 92%;
+  padding: 4vh 2vh;
+  background-color: #fbfbfc;
+}
+
+.content > div section .data * {
+  min-width: 0;
+}
+
+.content > div section .data table tr {
+  font-size: 1.8vh;
+  padding: 0 2vh;
+}
+
+.content > div section .data table tr td {
+  display: flex;
+  align-items: center;
+}
+
+.content > div section .data table tr td:not(:last-child) {
+  padding-right: 0.6vw;
+}
+
+.content > div section .data table tr td p {
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.content > div section .data table thead, .content > div section .data table tbody {
+  overflow-y: scroll;
+  scrollbar-width: thin;
+}
+
+.content > div section .data table thead::-webkit-scrollbar, .content > div section .data table tbody::-webkit-scrollbar {
+  width: 4px;
+}
+
+.content > div section .data table thead::-webkit-scrollbar-track, .content > div section .data table tbody::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.content > div section .data table thead {
+  scrollbar-color: transparent transparent;
+  height: calc(100% / 6);
+}
+
+.content > div section .data table thead tr {
+  height: 100%;
+}
+
+.content > div section .data table thead tr td p {
+  font-family: "Circular Bold";
+}
+
+.content > div section .data table tbody {
+  height: 100%;
+}
+
+.content > div section .data table tbody tr {
+  cursor: pointer;
+  min-height: calc(100% / 5);
+  transition: background-color 0.1s ease-in-out;
+}
+
+.content > div section .data table tbody tr td p {
+  color: #494c5c;
+}
+
+#handrail {
+  width: calc(50% - 4vh/2);
+}
+
+#handrail .title {
+  background-image: linear-gradient(to right, #7B5D93, #664d7a);
+}
+
+#handrail .data table tr td:nth-child(1) {
+  width: 15%;
+}
+
+#handrail .data table tr td:nth-child(2) {
+  width: 100%;
+}
+
+#handrail .data table tr td:nth-child(3) {
+  width: 25%;
+}
+
+#handrail .data table tr td:nth-child(4) {
+  width: 25%;
+}
+
+#handrail .data table thead tr td p {
+  color: #7B5D93;
+}
+
+#handrail .data table tbody {
+  scrollbar-color: #7B5D93 transparent;
+}
+
+#handrail .data table tbody::-webkit-scrollbar-thumb {
+  background: #9479aa;
+}
+
+#handrail .data table tbody::-webkit-scrollbar-thumb:hover {
+  background: #7B5D93;
+}
+
+#handrail .data table tbody tr:hover {
+  background-color: #dfd7e5;
+}
+
+#handrail .data table tbody tr td:first-child p {
+  height: 100%;
+  width: 100%;
+}
+
+#handrail .data table tbody tr td:first-child p i {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#agenda {
+  width: calc(50% - 4vh/2);
+}
+
+#agenda .title {
+  background-image: linear-gradient(to right, #F55A4E, #f33627);
+}
+
+#agenda .data table tr td:nth-child(1) {
+  width: 100%;
+}
+
+#agenda .data table tr td:nth-child(2) {
+  width: 25%;
+}
+
+#agenda .data table tr td:nth-child(3) {
+  width: 25%;
+}
+
+#agenda .data table thead tr td p {
+  color: #F55A4E;
+}
+
+#agenda .data table tbody {
+  scrollbar-color: #F55A4E transparent;
+}
+
+#agenda .data table tbody::-webkit-scrollbar-thumb {
+  background: #f8877e;
+}
+
+#agenda .data table tbody::-webkit-scrollbar-thumb:hover {
+  background: #F55A4E;
+}
+
+#agenda .data table tbody tr:hover {
+  background-color: #fde1df;
+}
+
+#agenda .data table tbody tr small {
+  font-family: "Circular Bold";
+  color: #626262;
+}
+
+#files .title {
+  background-image: linear-gradient(to right, #41966F, #357a5a);
+}
+
+#files .data table tr td:nth-child(1) {
+  width: 100%;
+}
+
+#files .data table tr td:nth-child(2) {
+  width: 12vw;
+}
+
+#files .data table tr td:nth-child(3) {
+  width: 8vw;
+}
+
+#files .data table thead tr td p {
+  color: #41966F;
+}
+
+#files .data table tbody {
+  scrollbar-color: #41966F transparent;
+}
+
+#files .data table tbody::-webkit-scrollbar-thumb {
+  background: #55b589;
+}
+
+#files .data table tbody::-webkit-scrollbar-thumb:hover {
+  background: #41966F;
+}
+
+#files .data table tbody tr:hover {
+  background-color: #c0e3d3;
+}
+
+.right-large {
+  width: 100%;
+}
+
+.right-medium {
+  width: calc(100% - 30vh);
+}
+
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+/*# sourceMappingURL=home.css.map */
+
+/*# sourceMappingURL=home.css.map */

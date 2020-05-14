@@ -1,0 +1,92 @@
+{% extends 'user/base.html.twig' %}
+
+{% block body %}
+    <div class="row-between w-100 h-100">
+        <section id="{% block page %}{% endblock %}" class="left-wrapper col-end h-100">
+            <div class="title-wrapper">
+                <div class="title row-between-center rounded shadow">
+                    <div>
+                        {% block title_icon %}{% endblock %}
+                        {{ block('title') }}
+                    </div>
+                    <div>
+                        {% if is_granted('ROLE_USER') and page != "profile" %}
+                            <a href="{{ new_path }}" title="Nouveau"><i class="fas fa-plus"></i></a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="data w-100 shadow">
+                <table>
+                    <thead class="col-start-start">
+                        {% block thead %}{% endblock %}
+                    </thead>
+                    <tbody class="col-start-start">
+                        {% block tbody %}{% endblock %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="right-wrapper">
+            <div class="title-wrapper">
+                {% if form is defined%}
+                    <div class="title form row-between-center rounded shadow">
+                        <div>
+                            {% if edit == false %}
+                                <i class="fas fa-pen"></i>Nouveau
+                            {% else %}
+                                <i class="fas fa-edit"></i>Modification
+                            {% endif %}
+                        </div>
+                        <div>
+                            {% if edit == true %}
+                                <a title="Voir" href="{{ article_path }}"><i class="fas fa-eye"></i></a>
+                                <a title="Supprimer" id="article-delete" href="" data-id="{{ article.id }}"><i class="fas fa-trash"></i></a>
+                            {% endif %}
+                            <a title="Fermer" href="{{ default_path }}"><i class="fas fa-times"></i></a>
+                        </div>
+                    </div>
+                {% elseif article is defined%}
+                    <div class="title form row-between-center rounded shadow">
+                        <div>
+                            <i class="fas fa-eye"></i>
+                            <p>{% block article_title %}{% endblock %}</p>
+                        </div>
+                        <div>
+                            {% block article_actions %}{% endblock %}
+                            <a title="Fermer" href="{{ default_path }}"><i class="fas fa-times"></i></a>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="data shadow">
+                {% if form is defined %}
+                    {% if edit == false %}
+                        <div class="form-wrapper">
+                            {% block new_form %}{% endblock %}
+                        </div>
+                    {% else %}
+                        <div class="form-wrapper">
+                            {% block edit_form %}{% endblock %}
+                        </div>
+                    {% endif %}
+                {% elseif article is defined %}
+                    <div class="article-wrapper col h-100">
+                        {% block article %}{% endblock %}
+                    </div>
+                {% elseif calendar is defined %}
+                    <div class="calendar-wrapper">
+                        <div id="calendar"></div>
+                    </div>
+                {% else %}
+                    <div class="empty-wrapper w-100 h-100 row-center-center"><i class="fas fa-ellipsis-h"></i></div>
+                {% endif %}
+            </div>
+        </section>
+    </div>
+{% endblock %}
+
+{% block js_end %}
+   {% block delete_script %}{% endblock %}
+{% endblock %}
